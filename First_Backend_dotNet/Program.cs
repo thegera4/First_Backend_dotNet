@@ -1,4 +1,6 @@
+using First_Backend_dotNet.Models;
 using First_Backend_dotNet.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,13 +19,20 @@ builder.Services.AddKeyedSingleton<IRandomService, RandomService>("randomSinglet
 builder.Services.AddKeyedScoped<IRandomService, RandomService>("randomScoped"); 
 // Transient es para que se cree un objeto nuevo cada vez que se inyecta aunque sea la misma clase
 builder.Services.AddKeyedTransient<IRandomService, RandomService>("randomTransient");
-
+// Inyeccion de dependencia para el servicio que se conecta a una API externa (jsonplaceholder) y trae los posts
 builder.Services.AddScoped<IPostsService, PostsService>();
 
 // HttpClientFactory para que no se cree un nuevo HttpClient cada vez que se haga una peticion, ya incluye el url
+// HttpClient para servicio jsonplaceholder
 builder.Services.AddHttpClient<IPostsService, PostsService>(c => 
 {
     c.BaseAddress = new Uri(builder.Configuration["BaseUrlPosts"]);
+});
+
+// Contexto para conexion a base de datos (Entity Framework)
+builder.Services.AddDbContext<StoreContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("StoreConnection"));
 });
 
 builder.Services.AddControllers();
