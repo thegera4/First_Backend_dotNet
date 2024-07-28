@@ -8,13 +8,13 @@ namespace First_Backend_dotNet.Controllers
     [ApiController]
     public class RandomController : ControllerBase
     {
-        private IRandomService _randomServiceSingleton;
-        private IRandomService _randomServiceScoped;
-        private IRandomService _randomServiceTransient;
+        private readonly IRandomService _randomServiceSingleton;
+        private readonly IRandomService _randomServiceScoped;
+        private readonly IRandomService _randomServiceTransient;
 
-        private IRandomService _randomService2Singleton;
-        private IRandomService _randomService2Scoped;
-        private IRandomService _randomService2Transient;
+        private readonly IRandomService _randomService2Singleton;
+        private readonly IRandomService _randomService2Scoped;
+        private readonly IRandomService _randomService2Transient;
 
         public RandomController( // constructor recibe las interfaces que se registraron en el Program.cs (inyeccion de dependencias)
             [FromKeyedServices("randomSingleton")] IRandomService randomServiceSingleton,
@@ -48,11 +48,6 @@ namespace First_Backend_dotNet.Controllers
             };
             return result;
         }
-
-
-
-
-
 
     }
 }
