@@ -1,5 +1,8 @@
+using First_Backend_dotNet.DTOs;
 using First_Backend_dotNet.Models;
 using First_Backend_dotNet.Services;
+using First_Backend_dotNet.Validators;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,11 +22,11 @@ builder.Services.AddKeyedSingleton<IRandomService, RandomService>("randomSinglet
 builder.Services.AddKeyedScoped<IRandomService, RandomService>("randomScoped"); 
 // Transient es para que se cree un objeto nuevo cada vez que se inyecta aunque sea la misma clase
 builder.Services.AddKeyedTransient<IRandomService, RandomService>("randomTransient");
+
 // Inyeccion de dependencia para el servicio que se conecta a una API externa (jsonplaceholder) y trae los posts
 builder.Services.AddScoped<IPostsService, PostsService>();
 
-// HttpClientFactory para que no se cree un nuevo HttpClient cada vez que se haga una peticion, ya incluye el url
-// HttpClient para servicio jsonplaceholder
+// HttpClientFactory para que no se cree un nuevo HttpClient cada vez que se haga una peticion, ya incluye el url de jsonplaceholder
 builder.Services.AddHttpClient<IPostsService, PostsService>(c => 
 {
     c.BaseAddress = new Uri(builder.Configuration["BaseUrlPosts"]);
@@ -34,6 +37,10 @@ builder.Services.AddDbContext<StoreContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("StoreConnection"));
 });
+
+// Validadores
+builder.Services.AddScoped<IValidator<BeerInsertDto>, BeerInsertValidator>();
+builder.Services.AddScoped<IValidator<BeerUpdateDto>, BeerUpdateValidator>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
