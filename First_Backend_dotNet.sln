@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "First_Backend_dotNet", "First_Backend_dotNet\First_Backend_dotNet.csproj", "{87F68260-7B43-43D7-AAA4-B4AE87FDF405}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "First_Backend_dotNet", "First_Backend_dotNet\First_Backend_dotNet.csproj", "{87F68260-7B43-43D7-AAA4-B4AE87FDF405}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{861FDCFA-2CE7-48E5-97B7-756D1A22275A}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

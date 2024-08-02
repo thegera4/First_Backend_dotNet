@@ -26,6 +26,9 @@ builder.Services.AddKeyedTransient<IRandomService, RandomService>("randomTransie
 // Inyeccion de dependencia para el servicio que se conecta a una API externa (jsonplaceholder) y trae los posts
 builder.Services.AddScoped<IPostsService, PostsService>();
 
+// Inyeccion de dependencia para el servicio que realiza las operaciones CRUD (se usa con Keyed para poder tener varias implementaciones de diferentes servicios(ejemplo, Beers, Customers, Products, etc)
+builder.Services.AddKeyedScoped<ICommonService<BeerDto, BeerInsertDto, BeerUpdateDto>, BeerService>("beerService");
+
 // HttpClientFactory para que no se cree un nuevo HttpClient cada vez que se haga una peticion, ya incluye el url de jsonplaceholder
 builder.Services.AddHttpClient<IPostsService, PostsService>(c => 
 {
