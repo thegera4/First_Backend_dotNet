@@ -16,8 +16,7 @@ namespace First_Backend_dotNet.Controllers
         private readonly IValidator<BeerUpdateDto> _beerUpdateValidator;
         private readonly ICommonService<BeerDto, BeerInsertDto, BeerUpdateDto> _beerService;
 
-        public BeerController(StoreContext context, 
-            IValidator<BeerInsertDto> beerInsertValidator, 
+        public BeerController(IValidator<BeerInsertDto> beerInsertValidator, 
             IValidator<BeerUpdateDto> beerUpdateValidator,
             [FromKeyedServices("beerService")]ICommonService<BeerDto, BeerInsertDto, BeerUpdateDto> beerService)
         {

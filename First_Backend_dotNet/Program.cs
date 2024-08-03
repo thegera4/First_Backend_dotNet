@@ -1,5 +1,6 @@
 using First_Backend_dotNet.DTOs;
 using First_Backend_dotNet.Models;
+using First_Backend_dotNet.Repository;
 using First_Backend_dotNet.Services;
 using First_Backend_dotNet.Validators;
 using FluentValidation;
@@ -34,6 +35,9 @@ builder.Services.AddHttpClient<IPostsService, PostsService>(c =>
 {
     c.BaseAddress = new Uri(builder.Configuration["BaseUrlPosts"]);
 });
+
+// Repository
+builder.Services.AddScoped<IRepository<Beer>, BeerRepository>();
 
 // Contexto para conexion a base de datos (Entity Framework)
 builder.Services.AddDbContext<StoreContext>(options =>
