@@ -9,10 +9,13 @@ namespace First_Backend_dotNet.Services
 
     public interface ICommonService<T, TI, TU> // con generics podemos definir
     {
+        public List<string> Errors { get; }
         Task<IEnumerable<T>> Get();
         Task<T?> GetById(int id); // es tarea del controlador regresar un ActionResult ya que ActionResult esta ligado a la respuesta HTTP
         Task<T> Add(TI beerInsertDto); 
         Task<T?> Update(int id, TU beerUpdateDto);
         Task<T?> Delete(int id);
+        bool Validate(TI dto);
+        bool Validate(TU dto);
     }
 }

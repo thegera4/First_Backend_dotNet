@@ -1,10 +1,7 @@
 ﻿using First_Backend_dotNet.DTOs;
-using First_Backend_dotNet.Models;
 using First_Backend_dotNet.Services;
 using FluentValidation;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace First_Backend_dotNet.Controllers
 {
@@ -16,9 +13,9 @@ namespace First_Backend_dotNet.Controllers
         private readonly IValidator<BeerUpdateDto> _beerUpdateValidator;
         private readonly ICommonService<BeerDto, BeerInsertDto, BeerUpdateDto> _beerService;
 
-        public BeerController(IValidator<BeerInsertDto> beerInsertValidator, 
+        public BeerController(IValidator<BeerInsertDto> beerInsertValidator,
             IValidator<BeerUpdateDto> beerUpdateValidator,
-            [FromKeyedServices("beerService")]ICommonService<BeerDto, BeerInsertDto, BeerUpdateDto> beerService)
+            [FromKeyedServices("beerService")] ICommonService<BeerDto, BeerInsertDto, BeerUpdateDto> beerService)
         {
             _beerInsertValidator = beerInsertValidator;
             _beerUpdateValidator = beerUpdateValidator;
@@ -37,13 +34,18 @@ namespace First_Backend_dotNet.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BeerDto>> Add(BeerInsertDto beerInsertDto) 
+        public async Task<ActionResult<BeerDto>> Add(BeerInsertDto beerInsertDto)
         {
             // se valida el objeto que se recibe, a traves de nuestra dependencia inyectada de FluentValidator
             var validationResult = await _beerInsertValidator.ValidateAsync(beerInsertDto);
-            if(!validationResult.IsValid)
+            if (!validationResult.IsValid)
             {
                 return BadRequest(validationResult.Errors);
+            }
+
+            if (!_beerService.Validate(beerInsertDto))
+            {
+                return BadRequest(_beerService.Errors);
             }
 
             var beerDto = await _beerService.Add(beerInsertDto);
@@ -55,9 +57,14 @@ namespace First_Backend_dotNet.Controllers
         public async Task<ActionResult<BeerDto?>> Update(int id, BeerUpdateDto beerUpdateDto)
         {
             var validationResult = await _beerUpdateValidator.ValidateAsync(beerUpdateDto);
-            if(!validationResult.IsValid)
+            if (!validationResult.IsValid)
             {
                 return BadRequest(validationResult.Errors);
+            }
+
+            if (!_beerService.Validate(beerUpdateDto))
+            {
+                return BadRequest(_beerService.Errors);
             }
 
             var beerDto = await _beerService.Update(id, beerUpdateDto);

@@ -10,6 +10,7 @@ namespace First_Backend_dotNet.Services
     {
         private readonly IRepository<Beer> _beerRepository = beerRepository; // Repositorio para realizar las operaciones CRUD
         private readonly IMapper _mapper = mapper; // Automapper para mapear los objetos
+        public List<string> Errors { get; } = [];
 
         public async Task<IEnumerable<BeerDto>> Get()
         {
@@ -118,5 +119,24 @@ namespace First_Backend_dotNet.Services
             return null;
         }
 
+        public bool Validate(BeerInsertDto beerInsertDto) 
+        {
+            if(_beerRepository.Search(beer => beer.Name == beerInsertDto.Name).Any())
+            {
+                Errors.Add("Ya existe una cerveza con ese nombre");
+                return false;
+            }
+            return true;
+        }
+
+        public bool Validate(BeerUpdateDto beerUpdateDto)
+        {
+            if (_beerRepository.Search(beer => beer.Name == beerUpdateDto.Name && beerUpdateDto.Id != beer.BeerId).Any())
+            {
+                Errors.Add("Ya existe una cerveza con ese nombre");
+                return false;
+            }
+            return true;
+        }
     }
 }

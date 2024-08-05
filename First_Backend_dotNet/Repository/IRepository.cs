@@ -1,4 +1,6 @@
-﻿namespace First_Backend_dotNet.Repository
+﻿using First_Backend_dotNet.Models;
+
+namespace First_Backend_dotNet.Repository
 {
     public interface IRepository<TEntity>
     {
@@ -8,5 +10,6 @@
         void Update(TEntity entity);
         void Delete(TEntity entity);
         Task Save();
+        IEnumerable<TEntity> Search(Func<TEntity, bool> filter);
     }
 }
